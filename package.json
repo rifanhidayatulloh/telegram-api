@@ -1,6 +1,9 @@
 {
   "name": "telegram-backend",
   "main": "index.js",
+  "engines": {
+    "node": "16.5.0"
+  },
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
