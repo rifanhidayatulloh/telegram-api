@@ -30,8 +30,8 @@ module.exports = {
       const id = uuidv4();
       const passwordHashed = await bcrypt.hash(password, 10);
       const verifyToken = crypto.randomBytes(64).toString('hex');
-      const isVerified = 1;
-      const isActive = 1;
+      const isVerified = 0;
+      const isActive = 0;
       const photo = 'profile-default.png';
 
       const data = {
@@ -42,6 +42,7 @@ module.exports = {
         isVerified,
         isActive,
         photo,
+        verifyToken
       };
 
       // insert data
@@ -49,16 +50,16 @@ module.exports = {
       // sendEmail.sendConfirmationEmail(email, verifyToken, fullname);
 
       // send email for activate account
-      // const templateEmail = {
-      //   from: `"${APP_NAME}" <${EMAIL_FROM}>`,
-      //   to: req.body.email.toLowerCase(),
-      //   subject: 'Activate Your Account!',
-      //   html: activateAccount(
-      //     `${API_URL}auth/activation/${verifyToken}`,
-      //     fullname
-      //   ),
-      // };
-      // sendEmail(templateEmail);
+      const templateEmail = {
+        from: `"${APP_NAME}" <${EMAIL_FROM}>`,
+        to: req.body.email.toLowerCase(),
+        subject: 'Activate Your Account!',
+        html: activateAccount(
+          `${API_URL}auth/activation?token=${verifyToken}`,
+          fullname
+        ),
+      };
+      sendEmail(templateEmail);
 
       success(res, {
         code: 200,
@@ -163,7 +164,7 @@ module.exports = {
       authModel
         .verifyingUser(token)
         .then((result) => {
-          res.send(`
+          return res.send(`
           <div>
           <h1>Activation Success!</h1>
           <h3>You can login now!</h3>
@@ -179,12 +180,12 @@ module.exports = {
             error: [],
           });
         });
-      success(res, {
-        code: 200,
-        status: 'Success',
-        message: 'Verify Email Success',
-        data: [],
-      });
+      // success(res, {
+      //   code: 200,
+      //   status: 'Success',
+      //   message: 'Verify Email Success',
+      //   data: [],
+      // });
     } else {
       const err = {
         message: 'verify token is invalid',

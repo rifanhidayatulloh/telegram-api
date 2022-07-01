@@ -24,10 +24,11 @@ const authModel = {
         isVerified,
         isActive,
         photo,
+        verifyToken
       } = data;
       db.query(
-        `INSERT INTO users(id, email, password, is_active, is_verified, photo, fullname)
-        VALUES('${id}', '${email}', '${passwordHashed}', ${isActive}, ${isVerified}, '${photo}', '${fullname}')`,
+        `INSERT INTO users(id, email, password, is_active, is_verified, photo, fullname, verify_token)
+        VALUES('${id}', '${email}', '${passwordHashed}', ${isActive}, ${isVerified}, '${photo}', '${fullname}', '${verifyToken}')`,
         (err, result) => {
           if (err) {
             reject(err);
